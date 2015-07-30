@@ -32,7 +32,7 @@ public class App implements Serializable {
                 sb.append(String.format("%s ", exm));
             }
 
-            String nombreArchivo = String.format("/srv/web/medipacs.cl/www/htdocs/zip/%s-%d.zip", nombre, id);
+            String nombreArchivo = String.format("/srv/web/medipacs.cl/www/htdocs/zip/%s%d.zip", nombre, id);
             File zip = new File(nombreArchivo);
 
             if (!zip.isFile()) {
