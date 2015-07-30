@@ -32,17 +32,17 @@ public class App implements Serializable {
                 sb.append(String.format("%s ", exm));
             }
 
-            String nombreArchivo = String.format("/srv/web/medipacs.cl/www/htdocs/zip/%s.zip", nombre);
-
-            String linea = String.format("/usr/bin/zip -5 %s %s", nombreArchivo, StringUtils.trimToEmpty(sb.toString()));
-            logger.debug(linea);
-
-            Process p = Runtime.getRuntime().exec(linea);
-            p.waitFor();
-
+            String nombreArchivo = String.format("/srv/web/medipacs.cl/www/htdocs/zip/%s-%d.zip", nombre, id);
             File zip = new File(nombreArchivo);
-            logger.info("Archivo: '{}' # ok: '{}'", nombreArchivo, zip.isFile());
 
+            if (!zip.isFile()) {
+                String linea = String.format("/usr/bin/zip -5 %s %s", nombreArchivo, StringUtils.trimToEmpty(sb.toString()));
+                logger.debug(linea);
+
+                Process p = Runtime.getRuntime().exec(linea);
+                p.waitFor();
+            }
+            logger.info("Archivo: '{}' # ok: '{}'", nombreArchivo, zip.isFile());
         } catch (Exception e) {
             String mensaje = String.format("Error al procesar: %s", e.toString());
             logger.error(mensaje);
