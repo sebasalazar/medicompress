@@ -112,7 +112,7 @@ public class ServicioDB implements Serializable {
                             if (archivoTemporal.isFile()) {
                                 examenes.add(archivo);
                             } else {
-                                logger.error("No se encuentra: '{}' para paciente: '{}'", archivo, paciente);
+                                logger.debug("No se encuentra: '{}' para paciente: '{}'", archivo, paciente);
                             }
                         }
                     }

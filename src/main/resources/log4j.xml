@@ -48,7 +48,7 @@
     </appender>
 
     <logger name="cl.medipacs">
-        <level value="ERROR" />
+        <level value="DEBUG" />
         <appender-ref ref="INFO_APPENDER_LOAD" />
         <appender-ref ref="ERROR_APPENDER_LOAD" />
         <appender-ref ref="DEBUG_APPENDER_LOAD" />
