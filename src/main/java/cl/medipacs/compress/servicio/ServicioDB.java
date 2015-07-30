@@ -99,23 +99,27 @@ public class ServicioDB implements Serializable {
         List<String> examenes = new ArrayList<String>();
         try {
             if (id != null && StringUtils.isNotBlank(nombre)) {
-                String sql = String.format("SELECT patient.pat_name AS paciente, files.filepath AS archivo FROM patient INNER JOIN study ON (patient.pk = study.patient_fk) INNER JOIN series ON (study.pk = series.study_fk) INNER JOIN instance ON (series.pk = instance.series_fk ) INNER JOIN files ON (instance.pk = files.instance_fk) INNER JOIN filesystem ON (files.filesystem_fk = filesystem.pk) WHERE (study.pk = '%d' ) ", id);
-                PreparedStatement pst = conexion.prepareStatement(sql);
-                if (pst != null) {
-                    ResultSet rs = pst.executeQuery();
-                    while (rs.next()) {
-                        String paciente = rs.getString("paciente");
-                        String archivo = rs.getString("archivo");
+                boolean ok = conectar();
+                if (ok) {
+                    String sql = String.format("SELECT patient.pat_name AS paciente, files.filepath AS archivo FROM patient INNER JOIN study ON (patient.pk = study.patient_fk) INNER JOIN series ON (study.pk = series.study_fk) INNER JOIN instance ON (series.pk = instance.series_fk ) INNER JOIN files ON (instance.pk = files.instance_fk) INNER JOIN filesystem ON (files.filesystem_fk = filesystem.pk) WHERE (study.pk = '%d' ) ", id);
+                    PreparedStatement pst = conexion.prepareStatement(sql);
+                    if (pst != null) {
+                        ResultSet rs = pst.executeQuery();
+                        while (rs.next()) {
+                            String paciente = rs.getString("paciente");
+                            String archivo = rs.getString("archivo");
 
-                        File archivoTemporal = new File(archivo);
-                        if (archivoTemporal != null) {
-                            if (archivoTemporal.isFile()) {
-                                examenes.add(archivo);
-                            } else {
-                                logger.debug("No se encuentra: '{}' para paciente: '{}'", archivo, paciente);
+                            File archivoTemporal = new File(archivo);
+                            if (archivoTemporal != null) {
+                                if (archivoTemporal.isFile()) {
+                                    examenes.add(archivo);
+                                } else {
+                                    logger.debug("No se encuentra: '{}' para paciente: '{}'", archivo, paciente);
+                                }
                             }
                         }
                     }
+                    desconectar();
                 }
             }
         } catch (Exception e) {
