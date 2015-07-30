@@ -1,6 +1,7 @@
 package cl.medipacs.compress.run;
 
 import cl.medipacs.compress.servicio.ServicioDB;
+import java.io.File;
 import java.io.Serializable;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
@@ -30,11 +31,18 @@ public class App implements Serializable {
             for (String exm : consultarExamenes) {
                 sb.append(String.format("%s ", exm));
             }
-            String linea = String.format("/usr/bin/zip -5 /srv/web/medipacs.cl/www/htdocs/zip/%s.zip %s", nombre, StringUtils.trimToEmpty(sb.toString()));
+
+            String nombreArchivo = String.format("/srv/web/medipacs.cl/www/htdocs/zip/%s.zip", nombre);
+
+            String linea = String.format("/usr/bin/zip -5 %s %s", nombreArchivo, StringUtils.trimToEmpty(sb.toString()));
             logger.debug(linea);
 
             Process p = Runtime.getRuntime().exec(linea);
             p.waitFor();
+
+            File zip = new File(nombreArchivo);
+            logger.info("Archivo: '{}' # ok: '{}'", nombreArchivo, zip.isFile());
+
         } catch (Exception e) {
             String mensaje = String.format("Error al procesar: %s", e.toString());
             logger.error(mensaje);
