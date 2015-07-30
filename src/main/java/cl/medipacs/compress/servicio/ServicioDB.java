@@ -106,11 +106,13 @@ public class ServicioDB implements Serializable {
                     while (rs.next()) {
                         String paciente = rs.getString("paciente");
                         String archivo = rs.getString("archivo");
-                        
+
                         File archivoTemporal = new File(archivo);
                         if (archivoTemporal != null) {
                             if (archivoTemporal.isFile()) {
                                 examenes.add(archivo);
+                            } else {
+                                logger.error("No se encuentra: '{}' para paciente: '{}'", archivo, paciente);
                             }
                         }
                     }
