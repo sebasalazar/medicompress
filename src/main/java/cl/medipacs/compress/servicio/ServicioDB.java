@@ -107,7 +107,7 @@ public class ServicioDB implements Serializable {
                         ResultSet rs = pst.executeQuery();
                         while (rs.next()) {
                             String paciente = rs.getString("paciente");
-                            String archivo = rs.getString("archivo");
+                            String archivo = String.format("/opt/dcm4chee/server/default/archive/%s",rs.getString("archivo"));
 
                             File archivoTemporal = new File(archivo);
                             if (archivoTemporal != null) {
