@@ -4,7 +4,7 @@
 
     <groupId>cl.medipacs</groupId>
     <artifactId>compress</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
 
     <name>compress</name>
@@ -17,7 +17,7 @@
         <log4j.version>1.2.17</log4j.version>
         <slf4j.version>1.7.12</slf4j.version>
         <commons.lang3.version>3.4</commons.lang3.version>
-        <pgsql.version>9.4-1201-jdbc41</pgsql.version>
+        <pgsql.version>9.4-1203-jdbc41</pgsql.version>
     </properties>
 
     <build>

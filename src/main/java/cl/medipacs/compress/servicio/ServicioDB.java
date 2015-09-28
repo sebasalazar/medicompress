@@ -1,7 +1,9 @@
 package cl.medipacs.compress.servicio;
 
+import cl.medipacs.compress.modelo.Compresion;
 import java.io.File;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -107,7 +109,7 @@ public class ServicioDB implements Serializable {
                         ResultSet rs = pst.executeQuery();
                         while (rs.next()) {
                             String paciente = rs.getString("paciente");
-                            String archivo = String.format("/opt/dcm4chee/server/default/archive/%s",rs.getString("archivo"));
+                            String archivo = String.format("/opt/dcm4chee/server/default/archive/%s", rs.getString("archivo"));
 
                             File archivoTemporal = new File(archivo);
                             if (archivoTemporal != null) {
@@ -128,5 +130,37 @@ public class ServicioDB implements Serializable {
             logger.debug("Error al obtener archivos: {}", e.toString(), e);
         }
         return examenes;
+    }
+
+    public boolean guardar(Compresion compresion) {
+        boolean ok = false;
+        try {
+            if (compresion != null) {
+                boolean conectadoDB = conectar();
+                if (conectadoDB) {
+                    String query = "INSERT INTO compresiones (fecha, paciente_fk, archivo, cantidad_examenes, tiempo_procesamiento, codigo_salida) VALUES (?,?,?,?,?,?)";
+                    PreparedStatement pst = conexion.prepareStatement(query);
+                    if (pst != null) {
+                        pst.setTimestamp(1, new java.sql.Timestamp(compresion.getFecha().getTime()));
+                        pst.setLong(2, compresion.getPacienteId());
+                        pst.setString(3, compresion.getArchivo());
+                        pst.setInt(4, compresion.getCantidadExamenes());
+                        pst.setBigDecimal(5, compresion.getTiempoProcesamiento());
+                        pst.setInt(6, compresion.getCodigoSalida());
+                        int executeUpdate = pst.executeUpdate();
+                        if (executeUpdate > 0) {
+                            ok = true;
+                        }
+                        pst.close();
+                        desconectar();
+                    }
+                }
+            }
+        } catch (Exception e) {
+            ok = false;
+            logger.error("Error al guardar compresion: {}", e.toString());
+            logger.debug("Error al guardar compresion: {}", e.toString(), e);
+        }
+        return ok;
     }
 }

@@ -4,10 +4,10 @@
 
     <appender name="ROOT_APPENDER_LOAD" class="org.apache.log4j.DailyRollingFileAppender">
         <param name="DatePattern" value="'.'yyyyMMdd" />
-        <param name="Append" value="false" />
+        <param name="Append" value="true" />
         <param name="MaxFileSize" value="200MB"/>
         <param name="MaxBackupIndex" value="10"/>
-        <param name="File" value="${java.io.tmpdir}${file.separator}medicompress.log" />
+        <param name="File" value="${java.io.tmpdir}${file.separator}medicompress${file.separator}medicompress.log" />
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="%d{dd/MM/yyyy}; %d{HH:mm:ss}; %p; {%C->%M} %m%n" />
         </layout>
@@ -15,8 +15,8 @@
 
     <appender name="ERROR_APPENDER_LOAD" class="org.apache.log4j.DailyRollingFileAppender">
         <param name="DatePattern" value="'.'yyyyMMdd" />
-        <param name="Append" value="false" />
-        <param name="File" value="${java.io.tmpdir}${file.separator}error_medicompress.log" />
+        <param name="Append" value="true" />
+        <param name="File" value="${java.io.tmpdir}${file.separator}medicompress${file.separator}error_medicompress.log" />
         <param name="threshold" value="error" />
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="[%d{dd/MM/yyyy HH:mm:ss,SSS}] {%C->%M} %m%n" />
@@ -25,9 +25,9 @@
 
     <appender name="DEBUG_APPENDER_LOAD" class="org.apache.log4j.DailyRollingFileAppender">
         <param name="DatePattern" value="'.'yyyyMMdd" />
-        <param name="Append" value="false" /> 
-        <!-- <param name="Append" value="true" /> -->
-        <param name="File" value="${java.io.tmpdir}${file.separator}debug_medicompress.log" />
+        <!--<param name="Append" value="false" />--> 
+        <param name="Append" value="true" /> 
+        <param name="File" value="${java.io.tmpdir}${file.separator}medicompress${file.separator}debug_medicompress.log" />
         <param name="threshold" value="debug" />
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="%d{dd/MM/yyyy}; %d{HH:mm:ss}; %p; {%C->%M} %m%n" />
@@ -36,8 +36,8 @@
 
     <appender name="INFO_APPENDER_LOAD" class="org.apache.log4j.DailyRollingFileAppender">
         <param name="DatePattern" value="'.'yyyyMMdd" />
-        <param name="Append" value="false" />
-        <param name="File" value="${java.io.tmpdir}${file.separator}info_medicompress.log" />
+        <param name="Append" value="true" />
+        <param name="File" value="${java.io.tmpdir}${file.separator}medicompress${file.separator}info_medicompress.log" />
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="%d{dd/MM/yyyy}; %d{HH:mm:ss}; %p; %m%n" />
         </layout>
@@ -57,7 +57,7 @@
 
     <root>
         <!-- Debería cambiarse por FATAL en producción. -->
-        <level value="ERROR" />
+        <level value="FATAL" />
         <appender-ref ref="ROOT_APPENDER_LOAD" />
     </root>
 
