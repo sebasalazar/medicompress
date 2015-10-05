@@ -9,6 +9,7 @@ CREATE TABLE compresiones (
     cantidad_examenes int NOT NULL DEFAULT '0',
     tiempo_procesamiento numeric NOT NULL DEFAULT '0',
     codigo_salida int DEFAULT '-1',
+    tamano bigint NOT NULL DEFAULT '0',
     PRIMARY KEY (id)
 );
 

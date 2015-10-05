@@ -4,6 +4,7 @@ import cl.medipacs.compress.modelo.Compresion;
 import java.io.File;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -145,7 +146,7 @@ public class ServicioDB implements Serializable {
                         pst.setLong(2, compresion.getPacienteId());
                         pst.setString(3, compresion.getArchivo());
                         pst.setInt(4, compresion.getCantidadExamenes());
-                        pst.setBigDecimal(5, compresion.getTiempoProcesamiento());
+                        pst.setBigDecimal(5, compresion.getTiempoProcesamiento().setScale(5, RoundingMode.HALF_UP));
                         pst.setInt(6, compresion.getCodigoSalida());
                         int executeUpdate = pst.executeUpdate();
                         if (executeUpdate > 0) {

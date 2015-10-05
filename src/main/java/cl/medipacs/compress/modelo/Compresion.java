@@ -12,6 +12,7 @@ public class Compresion {
     private Integer cantidadExamenes = 0;
     private BigDecimal tiempoProcesamiento = BigDecimal.ZERO;
     private Integer codigoSalida = -1;
+    private Long tamano = 0L;
 
     public Long getId() {
         return id;
@@ -67,6 +68,14 @@ public class Compresion {
 
     public void setCodigoSalida(Integer codigoSalida) {
         this.codigoSalida = codigoSalida;
+    }
+
+    public Long getTamano() {
+        return tamano;
+    }
+
+    public void setTamano(Long tamano) {
+        this.tamano = tamano;
     }
 
     public boolean isOk() {

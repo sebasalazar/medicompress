@@ -42,7 +42,8 @@ public class App implements Serializable {
                 String nombreArchivo = String.format("/srv/web/medipacs.cl/www/htdocs/zip/%s%d.zip", nombre, id);
                 File zip = new File(nombreArchivo);
 
-                int codigo = -1;
+                boolean procesado = false;
+                int codigo = 0;
                 if (!zip.isFile()) {
                     String linea = String.format("/usr/bin/zip -5 %s %s", nombreArchivo, StringUtils.trimToEmpty(sb.toString()));
                     logger.debug(linea);
@@ -50,20 +51,27 @@ public class App implements Serializable {
                     Process p = Runtime.getRuntime().exec(linea);
                     p.waitFor();
                     codigo = p.exitValue();
+                    procesado = true;
+                    zip = new File(nombreArchivo);
                 }
 
                 // Objeto Compresión, unica finalidad registro de examenes
                 long tiempoFin = new Date().getTime();
-                Compresion compresion = new Compresion();
-                compresion.setArchivo(nombreArchivo);
-                compresion.setCantidadExamenes(consultarExamenes.size());
-                compresion.setFecha(ahora);
-                compresion.setPacienteId(id);
-                compresion.setCodigoSalida(codigo);
-                compresion.setTiempoProcesamiento(new BigDecimal((tiempoFin - tiempoInicio) / 1000.0));
-                boolean okGuardado = servicio.guardar(compresion);
 
-                logger.info("Archivo: '{}' # ok: '{}' # db: '{}'", nombreArchivo, zip.isFile(), okGuardado);
+                boolean okGuardado = false;
+                if (procesado && zip.isFile()) {
+                    Compresion compresion = new Compresion();
+                    compresion.setArchivo(nombreArchivo);
+                    compresion.setCantidadExamenes(consultarExamenes.size());
+                    compresion.setFecha(ahora);
+                    compresion.setPacienteId(id);
+                    compresion.setCodigoSalida(codigo);
+                    compresion.setTiempoProcesamiento(new BigDecimal((tiempoFin - tiempoInicio) / 1000.0));
+                    compresion.setTamano(zip.length());
+                    okGuardado = servicio.guardar(compresion);
+                }
+
+                logger.info("Archivo: '{}' # ok: '{}' # db: '{}'", nombreArchivo, zip.isFile(), (okGuardado || !procesado));
             } else {
                 System.out.println("Argumentos inválidos");
             }
