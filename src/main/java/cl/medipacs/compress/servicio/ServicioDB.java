@@ -139,7 +139,7 @@ public class ServicioDB implements Serializable {
             if (compresion != null) {
                 boolean conectadoDB = conectar();
                 if (conectadoDB) {
-                    String query = "INSERT INTO compresiones (fecha, paciente_id, archivo, cantidad_examenes, tiempo_procesamiento, codigo_salida) VALUES (?,?,?,?,?,?)";
+                    String query = "INSERT INTO compresiones (fecha, paciente_id, archivo, cantidad_examenes, tiempo_procesamiento, codigo_salida, tamano) VALUES (?,?,?,?,?,?,?)";
                     PreparedStatement pst = conexion.prepareStatement(query);
                     if (pst != null) {
                         pst.setTimestamp(1, new java.sql.Timestamp(compresion.getFecha().getTime()));
@@ -148,6 +148,7 @@ public class ServicioDB implements Serializable {
                         pst.setInt(4, compresion.getCantidadExamenes());
                         pst.setBigDecimal(5, compresion.getTiempoProcesamiento().setScale(5, RoundingMode.HALF_UP));
                         pst.setInt(6, compresion.getCodigoSalida());
+                        pst.setLong(7, compresion.getTamano());
                         int executeUpdate = pst.executeUpdate();
                         if (executeUpdate > 0) {
                             ok = true;
