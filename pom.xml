@@ -4,26 +4,26 @@
 
     <groupId>cl.medipacs</groupId>
     <artifactId>compress</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <packaging>jar</packaging>
 
     <name>compress</name>
     <url>http://maven.apache.org</url>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jvm.version>1.6</jvm.version>
+        <jvm.version>1.8</jvm.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>4.11</junit.version>
         <log4j.version>1.2.17</log4j.version>
-        <slf4j.version>1.7.12</slf4j.version>
+        <slf4j.version>1.7.13</slf4j.version>
         <commons.lang3.version>3.4</commons.lang3.version>
-        <pgsql.version>9.4-1203-jdbc41</pgsql.version>
+        <pgsql.version>9.4-1204-jdbc42</pgsql.version>
     </properties>
 
     <build>
         <plugins>
             <plugin>
-                <version>2.5.1</version>
+                <version>3.3</version>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
@@ -61,7 +61,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>2.4.1</version> <!-- Versión 2.0 con Maven3 -->
+                <version>2.4.2</version> <!-- Versión 2.0 con Maven3 -->
                 <executions>
                     <execution>
                         <phase>package</phase>

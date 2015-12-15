@@ -1,5 +1,6 @@
 package cl.medipacs.compress.run;
 
+import cl.medipacs.compress.MediCompressUtils;
 import cl.medipacs.compress.modelo.Compresion;
 import cl.medipacs.compress.servicio.ServicioDB;
 import java.io.File;
@@ -7,6 +8,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +26,7 @@ public class App implements Serializable {
      */
     public static void main(String[] args) {
         try {
-            Long id = Long.parseLong(args[0]);
+            Long id = MediCompressUtils.crearLong(StringUtils.trimToEmpty(args[0]));
             String nombre = StringUtils.trimToEmpty(args[1]);
 
             if (id != null && StringUtils.isNotBlank(nombre)) {
@@ -35,24 +37,27 @@ public class App implements Serializable {
 
                 List<String> consultarExamenes = servicio.consultarExamenes(id, nombre);
                 StringBuilder sb = new StringBuilder();
-                for (String exm : consultarExamenes) {
+                consultarExamenes.stream().forEach((exm) -> {
                     sb.append(String.format("%s ", exm));
-                }
+                });
 
                 String nombreArchivo = String.format("/srv/web/medipacs.cl/www/htdocs/zip/%s%d.zip", nombre, id);
                 File zip = new File(nombreArchivo);
 
                 boolean procesado = false;
-                int codigo = 0;
+                int codigo = -999;
                 if (!zip.isFile()) {
                     String linea = String.format("/usr/bin/zip -5 %s %s", nombreArchivo, StringUtils.trimToEmpty(sb.toString()));
                     logger.debug(linea);
 
                     Process p = Runtime.getRuntime().exec(linea);
-                    p.waitFor();
-                    codigo = p.exitValue();
-                    procesado = true;
-                    zip = new File(nombreArchivo);
+                    procesado = p.waitFor(5L, TimeUnit.MINUTES);
+                    if (procesado) {
+                        codigo = p.exitValue();
+                        zip = new File(nombreArchivo);
+                    } else {
+                        p.destroyForcibly();
+                    }
                 }
 
                 // Objeto Compresión, unica finalidad registro de examenes
@@ -82,5 +87,4 @@ public class App implements Serializable {
             System.out.println(mensaje);
         }
     }
-
 }
